@@ -12,6 +12,7 @@ class UsersController < ApplicationController
     @user = User.new(user_params)
     #@user = User.new(params[:user]) #don't use this because of security risk
     if @user.save
+      sign_in @user #sign in right after sign up
       flash[:success] = "Welcome to the Sample App!"
       redirect_to @user  
     else
