@@ -1,4 +1,6 @@
 class User < ActiveRecord::Base
+  has_many :microposts, dependent: :destroy # "dependent: :destroy": destroy all dependent (microposts) when user is removed
+  
   before_save { self.email = email.downcase }
   before_create :create_remember_token
   validates :name, presence: true, length: {maximum: 50}
@@ -15,6 +17,11 @@ class User < ActiveRecord::Base
 
   def User.encrypt(token)
     Digest::SHA1.hexdigest(token.to_s) #encrypt token so that even if our entire database is compromised, the attacker still won’t be able to use the remember tokens to sign in
+  end
+  
+  def feed
+    # This is preliminary. See "Following users" for the full implementation.
+    Micropost.where("user_id = ?", id)
   end
 
   private

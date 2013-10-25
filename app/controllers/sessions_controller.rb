@@ -8,7 +8,7 @@ class SessionsController < ApplicationController
     #determine if the resulting user is valid. Taking into account that any object
     if user && user.authenticate(params[:session][:password])
       sign_in user
-      redirect_to user
+      redirect_back_or user
     else
       flash[:error] = 'Invalid email/password combination' # Not quite right!
       render 'new'
